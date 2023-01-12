@@ -58,17 +58,28 @@ public class UsuarioService {
         return "Sucesso na deleção!";
     }
 
-    public String createTarefa(Long id_usuario, Tarefa tarefa){
-        Usuario usuario = usuarioRepository.findById(id_usuario).get();
+    public String createTarefa(Long idUsuario, Tarefa tarefa){
+        Usuario usuario = usuarioRepository.findById(idUsuario).get();
         tarefa.setUsuario(usuario);
         tarefaService.create(tarefa);
         return "Tarefa criada com sucesso!";
     }
 
-    public String updateTarefa(Long id_usuario, Long id_tarefa, Tarefa tarefa){
-        Usuario usuario = usuarioRepository.findById(id_usuario).get();
+    public String updateTarefa(Long idUsuario, Long idTarefa, Tarefa tarefa){
+        Usuario usuario = usuarioRepository.findById(idUsuario).get();
         tarefa.setUsuario(usuario);
-        tarefaService.update(id_tarefa, tarefa);
+        tarefaService.update(idTarefa, tarefa);
         return "Atualizado com sucesso!";
+    }
+
+    public String deleteTarefa(Long idUsuario, Long idTarefa){
+        Usuario usuario = usuarioRepository.findById(idUsuario).get();
+        usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
+        if (usuario.getTarefas().contains(tarefaService.getById(idTarefa))){
+            tarefaService.delete(idTarefa);
+            return "Tarefa excluída com sucesso!";
+        }else{
+            return "Erro na deleção!";
+        }
     }
 }

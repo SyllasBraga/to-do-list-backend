@@ -13,6 +13,10 @@ public class TarefaService {
         this.tarefaRepository = tarefaRepository;
     }
 
+    public Tarefa getById(Long id){
+        return tarefaRepository.findById(id).get();
+    }
+
     public String create(Tarefa tarefa){
         tarefaRepository.save(tarefa);
         return "Criado com sucesso!";
@@ -30,8 +34,7 @@ public class TarefaService {
         }).orElse("Erro na atualização!");
     }
 
-    public String delete(Long id){
+    public void delete(Long id){
         tarefaRepository.deleteById(id);
-        return "Sucesso na deleção";
     }
 }

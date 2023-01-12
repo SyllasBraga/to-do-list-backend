@@ -54,4 +54,10 @@ public class UsuarioController {
                                                @RequestBody Tarefa tarefa){
         return ResponseEntity.ok(usuarioService.updateTarefa(idUsuario, idTarefa, tarefa));
     }
+
+    @DeleteMapping(path = "/{idUsuario}/tarefas/{idTarefa}")
+    public ResponseEntity<String> updateTarefa(@PathVariable(name = "idUsuario") Long idUsuario,
+                                               @PathVariable(name = "idTarefa") Long idTarefa){
+        return ResponseEntity.ok(usuarioService.deleteTarefa(idUsuario, idTarefa));
+    }
 }
