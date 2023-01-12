@@ -1,5 +1,6 @@
 package com.todolist.controller;
 
+import com.todolist.entities.Tarefa;
 import com.todolist.entities.Usuario;
 import com.todolist.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +41,10 @@ public class UsuarioController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         return ResponseEntity.ok(usuarioService.delete(id));
+    }
+
+    @PostMapping(path = "/{id}/tarefas")
+    public ResponseEntity<String> createTarefa(@PathVariable(name = "id") Long id_usuario,@RequestBody Tarefa tarefa){
+        return ResponseEntity.ok(usuarioService.createTarefa(id_usuario, tarefa));
     }
 }

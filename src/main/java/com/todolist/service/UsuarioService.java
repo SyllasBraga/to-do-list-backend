@@ -14,10 +14,12 @@ public class UsuarioService {
 
     UsuarioRepository usuarioRepository;
     CalculaListaTarefas calcTarefas;
+    TarefaService tarefaService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, CalculaListaTarefas calcTarefas) {
+    public UsuarioService(UsuarioRepository usuarioRepository, CalculaListaTarefas calcTarefas, TarefaService tarefaService) {
         this.usuarioRepository = usuarioRepository;
         this.calcTarefas = calcTarefas;
+        this.tarefaService = tarefaService;
     }
 
     public List<Usuario> getAll(){
@@ -54,5 +56,12 @@ public class UsuarioService {
     public String delete(Long id){
         usuarioRepository.deleteById(id);
         return "Sucesso na deleção!";
+    }
+
+    public String createTarefa(Long id_usuario, Tarefa tarefa){
+        Usuario usuario = usuarioRepository.findById(id_usuario).get();
+        tarefa.setUsuario(usuario);
+        tarefaService.create(tarefa);
+        return "Tarefa criada com sucesso!";
     }
 }
