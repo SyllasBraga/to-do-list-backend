@@ -64,4 +64,11 @@ public class UsuarioService {
         tarefaService.create(tarefa);
         return "Tarefa criada com sucesso!";
     }
+
+    public String updateTarefa(Long id_usuario, Long id_tarefa, Tarefa tarefa){
+        Usuario usuario = usuarioRepository.findById(id_usuario).get();
+        tarefa.setUsuario(usuario);
+        tarefaService.update(id_tarefa, tarefa);
+        return "Atualizado com sucesso!";
+    }
 }

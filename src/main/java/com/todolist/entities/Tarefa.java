@@ -1,6 +1,7 @@
 package com.todolist.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.todolist.enums.TarefaStatus;
 import jakarta.persistence.*;
@@ -27,5 +28,6 @@ public class Tarefa {
 
     @ManyToOne
     @JoinColumn(name = "usuario")
+    @JsonIgnore
     private Usuario usuario;
 }

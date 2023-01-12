@@ -44,7 +44,14 @@ public class UsuarioController {
     }
 
     @PostMapping(path = "/{id}/tarefas")
-    public ResponseEntity<String> createTarefa(@PathVariable(name = "id") Long id_usuario,@RequestBody Tarefa tarefa){
-        return ResponseEntity.ok(usuarioService.createTarefa(id_usuario, tarefa));
+    public ResponseEntity<String> createTarefa(@PathVariable(name = "id") Long idUsuario,@RequestBody Tarefa tarefa){
+        return ResponseEntity.ok(usuarioService.createTarefa(idUsuario, tarefa));
+    }
+
+    @PutMapping(path = "/{idUsuario}/tarefas/{idTarefa}")
+    public ResponseEntity<String> updateTarefa(@PathVariable(name = "idUsuario") Long idUsuario,
+                                               @PathVariable(name = "idTarefa") Long idTarefa,
+                                               @RequestBody Tarefa tarefa){
+        return ResponseEntity.ok(usuarioService.updateTarefa(idUsuario, idTarefa, tarefa));
     }
 }
