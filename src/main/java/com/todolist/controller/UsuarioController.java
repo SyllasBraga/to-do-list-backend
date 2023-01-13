@@ -60,4 +60,11 @@ public class UsuarioController {
                                                @PathVariable(name = "idTarefa") Long idTarefa){
         return ResponseEntity.ok(usuarioService.deleteTarefa(idUsuario, idTarefa));
     }
+
+    @PutMapping(path = "/{idUsuario}/tarefas/{idTarefa}/updatestatus")
+    public ResponseEntity<String> updateStatusTarefa(@PathVariable(name = "idUsuario") Long idUsuario,
+                                                     @PathVariable(name = "idTarefa") Long idTarefa,
+                                                     @RequestParam(name = "status") int codStatus){
+        return ResponseEntity.ok(usuarioService.updateStatusTarefa(idUsuario,idTarefa, codStatus));
+    }
 }

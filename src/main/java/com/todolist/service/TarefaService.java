@@ -1,6 +1,7 @@
 package com.todolist.service;
 
 import com.todolist.entities.Tarefa;
+import com.todolist.enums.TarefaStatus;
 import com.todolist.repository.TarefaRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,27 @@ public class TarefaService {
 
     public void delete(Long id){
         tarefaRepository.deleteById(id);
+    }
+
+    public String atualizaStatus(Long idTarefa, int codStatus){
+
+        Tarefa tarefa = tarefaRepository.findById(idTarefa).get();
+
+        switch (codStatus){
+            case 1:
+                tarefa.setStatusTarefa(TarefaStatus.CONCLUIDA);
+                tarefaRepository.save(tarefa);
+                return "Sucesso na atualização de status!";
+            case 2:
+                tarefa.setStatusTarefa(TarefaStatus.PENDENTE);
+                tarefaRepository.save(tarefa);
+                return "Sucesso na atualização de status!";
+            case 3:
+                tarefa.setStatusTarefa(TarefaStatus.VENCIDA);
+                tarefaRepository.save(tarefa);
+                return "Sucesso na atualização de status!";
+            default:
+                return "Erro na atualização de status: Código incompatível!";
+        }
     }
 }

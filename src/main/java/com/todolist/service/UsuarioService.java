@@ -82,4 +82,16 @@ public class UsuarioService {
             return "Erro na deleção!";
         }
     }
+
+    public String updateStatusTarefa(Long idUsuario, Long idTarefa, int codStatus){
+
+        Usuario usuario = usuarioRepository.findById(idUsuario).get();
+        usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
+        if (usuario.getTarefas().contains(tarefaService.getById(idTarefa))){
+            return tarefaService.atualizaStatus(idTarefa, codStatus);
+        }else{
+            return "Erro na atualização!";
+        }
+
+    }
 }
