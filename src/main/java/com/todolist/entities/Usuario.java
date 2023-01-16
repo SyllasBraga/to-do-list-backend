@@ -2,8 +2,11 @@ package com.todolist.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.todolist.dtos.TarefaDTO;
+import com.todolist.dtos.UsuarioDTO;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -12,6 +15,7 @@ import java.util.List;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
+@NoArgsConstructor
 public class Usuario {
 
     @Id
@@ -23,4 +27,5 @@ public class Usuario {
 
     @Transient
     private List<Tarefa> tarefas;
+
 }

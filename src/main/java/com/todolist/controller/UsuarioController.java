@@ -1,5 +1,7 @@
 package com.todolist.controller;
 
+import com.todolist.dtos.TarefaDTO;
+import com.todolist.dtos.UsuarioDTO;
 import com.todolist.entities.Tarefa;
 import com.todolist.entities.Usuario;
 import com.todolist.service.UsuarioService;
@@ -19,22 +21,22 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> getAll(){
+    public ResponseEntity<List<UsuarioDTO>> getAll(){
         return ResponseEntity.ok(usuarioService.getAll());
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Usuario> getById(@PathVariable Long id){
+    public ResponseEntity<UsuarioDTO> getById(@PathVariable Long id){
         return ResponseEntity.ok(usuarioService.getById(id));
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody Usuario usuario){
-        return ResponseEntity.ok(usuarioService.create(usuario));
+    public ResponseEntity<String> create(@RequestBody UsuarioDTO usuarioDto){
+        return ResponseEntity.ok(usuarioService.create(usuarioDto));
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody Usuario usuario){
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody UsuarioDTO usuario){
         return ResponseEntity.ok(usuarioService.update(id, usuario));
     }
 
@@ -44,14 +46,14 @@ public class UsuarioController {
     }
 
     @PostMapping(path = "/{id}/tarefas")
-    public ResponseEntity<String> createTarefa(@PathVariable(name = "id") Long idUsuario,@RequestBody Tarefa tarefa){
+    public ResponseEntity<String> createTarefa(@PathVariable(name = "id") Long idUsuario,@RequestBody TarefaDTO tarefa){
         return ResponseEntity.ok(usuarioService.createTarefa(idUsuario, tarefa));
     }
 
     @PutMapping(path = "/{idUsuario}/tarefas/{idTarefa}")
     public ResponseEntity<String> updateTarefa(@PathVariable(name = "idUsuario") Long idUsuario,
                                                @PathVariable(name = "idTarefa") Long idTarefa,
-                                               @RequestBody Tarefa tarefa){
+                                               @RequestBody TarefaDTO tarefa){
         return ResponseEntity.ok(usuarioService.updateTarefa(idUsuario, idTarefa, tarefa));
     }
 

@@ -1,10 +1,13 @@
 package com.todolist.service;
 
+import com.todolist.dtos.TarefaDTO;
 import com.todolist.entities.Tarefa;
+import com.todolist.entities.Usuario;
 import com.todolist.enums.TarefaStatus;
 import com.todolist.exceptions.ResourceNotFoundException;
 import com.todolist.exceptions.CodStatusException;
 import com.todolist.repository.TarefaRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,18 +19,26 @@ public class TarefaService {
         this.tarefaRepository = tarefaRepository;
     }
 
-    public Tarefa getById(Long id){
+    public TarefaDTO getById(Long id){
         Tarefa tarefa = tarefaRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Tarefa não encontrada!"));
-        return tarefa;
+        TarefaDTO tarefaDto = new TarefaDTO(tarefa, tarefa.getUsuario());
+        return tarefaDto;
     }
 
-    public String create(Tarefa tarefa){
+    public String create(TarefaDTO tarefaDto){
+        Tarefa tarefa = new Tarefa();
+        Usuario usuario = new Usuario();
+        BeanUtils.copyProperties(tarefaDto, tarefa);
+        BeanUtils.copyProperties(tarefaDto.getUsuario(), usuario);
+        tarefa.setUsuario(usuario);
         tarefaRepository.save(tarefa);
         return "Criado com sucesso!";
     }
 
-    public String update(Long id, Tarefa tarefa){
+    public String update(Long id, TarefaDTO tarefaDto){
+        Tarefa tarefa = new Tarefa();
+        BeanUtils.copyProperties(tarefaDto, tarefa);
         return tarefaRepository.findById(id).map(Record ->{
             Record.setDataCadastro(tarefa.getDataCadastro());
             Record.setStatusTarefa(tarefa.getStatusTarefa());
