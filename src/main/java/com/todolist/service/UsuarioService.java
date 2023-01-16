@@ -2,12 +2,14 @@ package com.todolist.service;
 
 import com.todolist.entities.Tarefa;
 import com.todolist.entities.Usuario;
+import com.todolist.exceptions.ResourceNotFoundException;
 import com.todolist.repository.UsuarioRepository;
 import com.todolist.service.utils.CalculaListaTarefas;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -33,7 +35,8 @@ public class UsuarioService {
     }
 
     public Usuario getById(Long id){
-        Usuario usuario = usuarioRepository.findById(id).get();
+        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+        Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
         return usuario;
     }
@@ -43,37 +46,42 @@ public class UsuarioService {
         return "Criado com sucesso!";
     }
 
-    public String update(Long id, Usuario usuario){
+    public String update(Long id, Usuario usuarioObj){
         return usuarioRepository.findById(id).map(Record ->{
-            Record.setNome(usuario.getNome());
-            Record.setLogin(usuario.getLogin());
-            Record.setSenha(usuario.getSenha());
+            Record.setNome(usuarioObj.getNome());
+            Record.setLogin(usuarioObj.getLogin());
+            Record.setSenha(usuarioObj.getSenha());
             usuarioRepository.save(Record);
             return "Atualizado com sucesso!";
-        }).orElse("Erro na atualização!");
+        }).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
     }
 
     public String delete(Long id){
+        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+        Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         usuarioRepository.deleteById(id);
         return "Sucesso na deleção!";
     }
 
     public String createTarefa(Long idUsuario, Tarefa tarefa){
-        Usuario usuario = usuarioRepository.findById(idUsuario).get();
+        Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
+        Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         tarefa.setUsuario(usuario);
         tarefaService.create(tarefa);
         return "Tarefa criada com sucesso!";
     }
 
     public String updateTarefa(Long idUsuario, Long idTarefa, Tarefa tarefa){
-        Usuario usuario = usuarioRepository.findById(idUsuario).get();
+        Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
+        Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         tarefa.setUsuario(usuario);
         tarefaService.update(idTarefa, tarefa);
         return "Atualizado com sucesso!";
     }
 
     public String deleteTarefa(Long idUsuario, Long idTarefa){
-        Usuario usuario = usuarioRepository.findById(idUsuario).get();
+        Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
+        Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
         if (usuario.getTarefas().contains(tarefaService.getById(idTarefa))){
             tarefaService.delete(idTarefa);
@@ -85,7 +93,8 @@ public class UsuarioService {
 
     public String updateStatusTarefa(Long idUsuario, Long idTarefa, int codStatus){
 
-        Usuario usuario = usuarioRepository.findById(idUsuario).get();
+        Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
+        Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
         if (usuario.getTarefas().contains(tarefaService.getById(idTarefa))){
             return tarefaService.atualizaStatus(idTarefa, codStatus);

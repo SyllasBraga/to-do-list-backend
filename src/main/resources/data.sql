@@ -28,4 +28,4 @@ insert into tarefa(descricao, status_tarefa, data_cadastro, data_prazo, data_ter
 ("Cortar o cabelo", "CONCLUIDA", '2023-01-01 15:00:00', "2023-01-06 08:00:00","2023-01-04 08:55:00", 1), ("Pagar os boletos", "VENCIDA", '2023-01-03 15:00:00', "2023-01-04 08:00:00", null, 1);
 
 insert into tarefa(descricao, status_tarefa, data_cadastro, data_prazo, data_termino, usuario) values ("Estudar array functions - JavaScript", "CONCLUIDA", '2023-07-01 15:00:00', "2023-07-15 08:00:00", "2023-07-07 08:55:00",2),
-("Terminar de assistir curso de Spring", "Pendente", '2023-07-01 15:00:00', "2023-07-07 08:55:00",null, 2), ("Terminar trabalho de AEDS", "VENCIDA", '2023-06-06', "2023-07-06",null, 2);
+("Terminar de assistir curso de Spring", "PENDENTE", '2023-07-01 15:00:00', "2023-07-07 08:55:00",null, 2), ("Terminar trabalho de AEDS", "VENCIDA", '2023-06-06', "2023-07-06",null, 2);

@@ -65,6 +65,6 @@ public class UsuarioController {
     public ResponseEntity<String> updateStatusTarefa(@PathVariable(name = "idUsuario") Long idUsuario,
                                                      @PathVariable(name = "idTarefa") Long idTarefa,
                                                      @RequestParam(name = "status") int codStatus){
-        return ResponseEntity.ok(usuarioService.updateStatusTarefa(idUsuario,idTarefa, codStatus));
+        return ResponseEntity.ok(usuarioService.updateStatusTarefa(idUsuario, idTarefa, codStatus));
     }
 }

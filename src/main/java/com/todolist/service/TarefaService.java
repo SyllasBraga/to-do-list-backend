@@ -2,6 +2,7 @@ package com.todolist.service;
 
 import com.todolist.entities.Tarefa;
 import com.todolist.enums.TarefaStatus;
+import com.todolist.exceptions.ResourceNotFoundException;
 import com.todolist.repository.TarefaRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,9 @@ public class TarefaService {
     }
 
     public Tarefa getById(Long id){
-        return tarefaRepository.findById(id).get();
+        Tarefa tarefa = tarefaRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Tarefa não encontrada!"));
+        return tarefa;
     }
 
     public String create(Tarefa tarefa){
@@ -32,7 +35,7 @@ public class TarefaService {
             Record.setDataTermino(tarefa.getDataTermino());
             tarefaRepository.save(Record);
             return "Atualizado com sucesso!";
-        }).orElse("Erro na atualização!");
+        }).orElseThrow(()-> new ResourceNotFoundException("Tarefa não encontrada!"));
     }
 
     public void delete(Long id){
@@ -41,7 +44,8 @@ public class TarefaService {
 
     public String atualizaStatus(Long idTarefa, int codStatus){
 
-        Tarefa tarefa = tarefaRepository.findById(idTarefa).get();
+        Tarefa tarefa = tarefaRepository.findById(idTarefa).orElseThrow(() ->
+                new ResourceNotFoundException("Tarefa não encontrada!"));
 
         switch (codStatus){
             case 1:
