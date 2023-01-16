@@ -6,6 +6,8 @@ import com.todolist.exceptions.TaskNotAcceptableException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -36,5 +38,18 @@ public class ControllerAdviceHandler {
         StandardError error = new StandardError(Instant.now(), HttpStatus.BAD_REQUEST.value(), e.getMessage(),
                 request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(error);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationError> argumentValidation(MethodArgumentNotValidException e,
+                                                            HttpServletRequest request){
+        ValidationError error = new ValidationError(Instant.now(), HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getMessage(),
+                request.getRequestURI(), null);
+
+        for (FieldError f :e.getFieldErrors()) {
+                error.addError(f.getField(), f.getDefaultMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY.value()).body(error);
     }
 }

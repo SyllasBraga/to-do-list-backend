@@ -5,6 +5,7 @@ import com.todolist.dtos.UsuarioDTO;
 import com.todolist.entities.Tarefa;
 import com.todolist.entities.Usuario;
 import com.todolist.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,12 +32,12 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody UsuarioDTO usuarioDto){
+    public ResponseEntity<String> create(@RequestBody @Valid UsuarioDTO usuarioDto){
         return ResponseEntity.ok(usuarioService.create(usuarioDto));
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody UsuarioDTO usuario){
+    public ResponseEntity<String> update(@PathVariable Long id, @Valid @RequestBody UsuarioDTO usuario){
         return ResponseEntity.ok(usuarioService.update(id, usuario));
     }
 
@@ -46,14 +47,14 @@ public class UsuarioController {
     }
 
     @PostMapping(path = "/{id}/tarefas")
-    public ResponseEntity<String> createTarefa(@PathVariable(name = "id") Long idUsuario,@RequestBody TarefaDTO tarefa){
+    public ResponseEntity<String> createTarefa(@PathVariable(name = "id") Long idUsuario, @Valid @RequestBody TarefaDTO tarefa){
         return ResponseEntity.ok(usuarioService.createTarefa(idUsuario, tarefa));
     }
 
     @PutMapping(path = "/{idUsuario}/tarefas/{idTarefa}")
     public ResponseEntity<String> updateTarefa(@PathVariable(name = "idUsuario") Long idUsuario,
                                                @PathVariable(name = "idTarefa") Long idTarefa,
-                                               @RequestBody TarefaDTO tarefa){
+                                               @RequestBody @Valid TarefaDTO tarefa){
         return ResponseEntity.ok(usuarioService.updateTarefa(idUsuario, idTarefa, tarefa));
     }
 
