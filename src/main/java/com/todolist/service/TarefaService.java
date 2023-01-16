@@ -3,6 +3,7 @@ package com.todolist.service;
 import com.todolist.entities.Tarefa;
 import com.todolist.enums.TarefaStatus;
 import com.todolist.exceptions.ResourceNotFoundException;
+import com.todolist.exceptions.CodStatusException;
 import com.todolist.repository.TarefaRepository;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +62,7 @@ public class TarefaService {
                 tarefaRepository.save(tarefa);
                 return "Sucesso na atualização de status!";
             default:
-                return "Erro na atualização de status: Código incompatível!";
+                throw new CodStatusException("Erro na atualização de status: Código incompatível!");
         }
     }
 }

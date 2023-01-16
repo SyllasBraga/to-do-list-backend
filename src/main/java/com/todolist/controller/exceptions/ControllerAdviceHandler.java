@@ -1,6 +1,8 @@
 package com.todolist.controller.exceptions;
 
+import com.todolist.exceptions.CodStatusException;
 import com.todolist.exceptions.ResourceNotFoundException;
+import com.todolist.exceptions.TaskNotAcceptableException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,4 +22,19 @@ public class ControllerAdviceHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(error);
     }
 
+    @ExceptionHandler(TaskNotAcceptableException.class)
+    public ResponseEntity<StandardError> taskNotAcceptableException(TaskNotAcceptableException e,
+                                                           HttpServletRequest request){
+        StandardError error = new StandardError(Instant.now(), HttpStatus.NOT_ACCEPTABLE.value(), e.getMessage(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE.value()).body(error);
+    }
+
+    @ExceptionHandler(CodStatusException.class)
+    public ResponseEntity<StandardError> codStatusException(CodStatusException e,
+                                                           HttpServletRequest request){
+        StandardError error = new StandardError(Instant.now(), HttpStatus.BAD_REQUEST.value(), e.getMessage(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(error);
+    }
 }

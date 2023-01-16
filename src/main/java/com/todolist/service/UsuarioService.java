@@ -3,6 +3,7 @@ package com.todolist.service;
 import com.todolist.entities.Tarefa;
 import com.todolist.entities.Usuario;
 import com.todolist.exceptions.ResourceNotFoundException;
+import com.todolist.exceptions.TaskNotAcceptableException;
 import com.todolist.repository.UsuarioRepository;
 import com.todolist.service.utils.CalculaListaTarefas;
 import org.springframework.stereotype.Service;
@@ -74,9 +75,14 @@ public class UsuarioService {
     public String updateTarefa(Long idUsuario, Long idTarefa, Tarefa tarefa){
         Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
         Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
-        tarefa.setUsuario(usuario);
-        tarefaService.update(idTarefa, tarefa);
-        return "Atualizado com sucesso!";
+        usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
+        if (usuario.getTarefas().contains(tarefaService.getById(idTarefa))){
+            tarefa.setUsuario(usuario);
+            tarefaService.update(idTarefa, tarefa);
+            return "Atualizado com sucesso!";
+        }else {
+            throw new TaskNotAcceptableException("Essa tarefa não pertence a este usuário!");
+        }
     }
 
     public String deleteTarefa(Long idUsuario, Long idTarefa){
@@ -87,7 +93,7 @@ public class UsuarioService {
             tarefaService.delete(idTarefa);
             return "Tarefa excluída com sucesso!";
         }else{
-            return "Erro na deleção!";
+            throw new TaskNotAcceptableException("Essa tarefa não pertence a este usuário!");
         }
     }
 
@@ -99,8 +105,7 @@ public class UsuarioService {
         if (usuario.getTarefas().contains(tarefaService.getById(idTarefa))){
             return tarefaService.atualizaStatus(idTarefa, codStatus);
         }else{
-            return "Erro na atualização!";
+            throw new TaskNotAcceptableException("Essa tarefa não pertence a este usuário!");
         }
-
     }
 }
