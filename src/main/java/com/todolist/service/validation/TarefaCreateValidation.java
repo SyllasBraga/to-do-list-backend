@@ -11,14 +11,8 @@ import java.util.List;
 
 public class TarefaCreateValidation implements ConstraintValidator<TarefaCreateValid, TarefaCreateDTO> {
 
-    private TarefaRepository tarefaRepository;
-
     @Override
     public void initialize(TarefaCreateValid ann) {
-    }
-
-    public TarefaCreateValidation(TarefaRepository tarefaRepository) {
-        this.tarefaRepository = tarefaRepository;
     }
 
     @Override

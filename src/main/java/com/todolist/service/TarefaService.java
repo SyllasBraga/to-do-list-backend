@@ -7,6 +7,7 @@ import com.todolist.enums.TarefaStatus;
 import com.todolist.exceptions.ResourceNotFoundException;
 import com.todolist.exceptions.CodStatusException;
 import com.todolist.repository.TarefaRepository;
+import com.todolist.service.utils.StandardResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -26,17 +27,21 @@ public class TarefaService {
         return tarefaDto;
     }
 
-    public String create(TarefaDTO tarefaDto){
+    public StandardResponse create(TarefaDTO tarefaDto){
         Tarefa tarefa = new Tarefa();
         Usuario usuario = new Usuario();
         BeanUtils.copyProperties(tarefaDto, tarefa);
         BeanUtils.copyProperties(tarefaDto.getUsuario(), usuario);
         tarefa.setUsuario(usuario);
         tarefaRepository.save(tarefa);
-        return "Criado com sucesso!";
+
+        StandardResponse standardResponse = new StandardResponse();
+        standardResponse.setObject(tarefa);
+
+        return standardResponse;
     }
 
-    public String update(Long id, TarefaDTO tarefaDto){
+    public StandardResponse update(Long id, TarefaDTO tarefaDto){
         Tarefa tarefa = new Tarefa();
         BeanUtils.copyProperties(tarefaDto, tarefa);
         return tarefaRepository.findById(id).map(Record ->{
@@ -46,32 +51,42 @@ public class TarefaService {
             Record.setDataPrazo(tarefa.getDataPrazo());
             Record.setDataTermino(tarefa.getDataTermino());
             tarefaRepository.save(Record);
-            return "Atualizado com sucesso!";
+
+            StandardResponse standardResponse = new StandardResponse();
+            standardResponse.setObject(Record);
+
+            return standardResponse;
         }).orElseThrow(()-> new ResourceNotFoundException("Tarefa não encontrada!"));
     }
 
-    public void delete(Long id){
+    public StandardResponse delete(Long id){
         tarefaRepository.deleteById(id);
+
+        StandardResponse standardResponse = new StandardResponse();
+
+        return standardResponse;
     }
 
-    public String atualizaStatus(Long idTarefa, int codStatus){
+    public StandardResponse atualizaStatus(Long idTarefa, int codStatus){
 
         Tarefa tarefa = tarefaRepository.findById(idTarefa).orElseThrow(() ->
                 new ResourceNotFoundException("Tarefa não encontrada!"));
+
+        StandardResponse standardResponse = new StandardResponse();
 
         switch (codStatus){
             case 1:
                 tarefa.setStatusTarefa(TarefaStatus.CONCLUIDA);
                 tarefaRepository.save(tarefa);
-                return "Sucesso na atualização de status!";
+                return standardResponse;
             case 2:
                 tarefa.setStatusTarefa(TarefaStatus.PENDENTE);
                 tarefaRepository.save(tarefa);
-                return "Sucesso na atualização de status!";
+                return standardResponse;
             case 3:
                 tarefa.setStatusTarefa(TarefaStatus.VENCIDA);
                 tarefaRepository.save(tarefa);
-                return "Sucesso na atualização de status!";
+                return standardResponse;
             default:
                 throw new CodStatusException("Erro na atualização de status: Código incompatível!");
         }

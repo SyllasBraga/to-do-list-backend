@@ -9,9 +9,13 @@ import com.todolist.exceptions.ResourceNotFoundException;
 import com.todolist.exceptions.TaskNotAcceptableException;
 import com.todolist.repository.UsuarioRepository;
 import com.todolist.service.utils.CalculaListaTarefas;
+import com.todolist.service.utils.StandardResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -31,32 +35,44 @@ public class UsuarioService {
         this.tarefaService = tarefaService;
     }
 
-    public List<UsuarioDTO> getAll(){
+    public StandardResponse getAll(){
         List<Usuario> listaComTarefas = new ArrayList<>();
 
         for (Usuario usuario : usuarioRepository.findAll()) {
             usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
             listaComTarefas.add(usuario);
         }
-        return listaComTarefas.stream().map(x -> new UsuarioDTO(x, x.getTarefas())).collect(Collectors.toList());
+
+        StandardResponse standardResponse = new StandardResponse();
+        standardResponse.setObject(listaComTarefas.stream().map(
+                x -> new UsuarioDTO(x, x.getTarefas())).collect(Collectors.toList()));
+
+        return standardResponse;
     }
 
-    public UsuarioDTO getById(Long id){
+    public StandardResponse getById(Long id){
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
         Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
 
-        return new UsuarioDTO(usuario, usuario.getTarefas());
+        StandardResponse standardResponse = new StandardResponse();
+        standardResponse.setObject(new UsuarioDTO(usuario, usuario.getTarefas()));
+
+        return standardResponse;
     }
 
-    public String create(UsuarioCreateDTO usuarioDto){
+    public StandardResponse create(UsuarioCreateDTO usuarioDto){
         Usuario usuario = new Usuario();
         BeanUtils.copyProperties(usuarioDto, usuario);
         usuarioRepository.save(usuario);
-        return "Criado com sucesso!";
+
+        StandardResponse standardResponse = new StandardResponse();
+        standardResponse.setObject(usuario);
+
+        return standardResponse;
     }
 
-    public String update(Long id, UsuarioDTO usuarioDto){
+    public StandardResponse update(Long id, UsuarioDTO usuarioDto){
         Usuario usuario = new Usuario();
         BeanUtils.copyProperties(usuarioDto, usuario);
         return usuarioRepository.findById(id).map(Record ->{
@@ -64,54 +80,60 @@ public class UsuarioService {
             Record.setLogin(usuario.getLogin());
             Record.setSenha(usuario.getSenha());
             usuarioRepository.save(Record);
-            return "Atualizado com sucesso!";
+
+            StandardResponse standardResponse = new StandardResponse();
+            standardResponse.setObject(Record);
+
+            return standardResponse;
         }).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
     }
 
-    public String delete(Long id){
+    public StandardResponse delete(Long id){
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
         Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         usuarioRepository.deleteById(usuario.getId());
-        return "Sucesso na deleção!";
+
+        StandardResponse standardResponse = new StandardResponse();
+
+        return standardResponse;
     }
 
-    public String createTarefa(Long idUsuario, TarefaCreateDTO tarefaDto){
+    public StandardResponse createTarefa(Long idUsuario, TarefaCreateDTO tarefaDto){
         Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
         Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         UsuarioDTO usuarioDto = new UsuarioDTO(usuario);
         tarefaDto.setUsuario(usuarioDto);
-        tarefaService.create(tarefaDto);
-        return "Tarefa criada com sucesso!";
+
+        return tarefaService.create(tarefaDto);
     }
 
-    public String updateTarefa(Long idUsuario, Long idTarefa, TarefaDTO tarefa){
+    public StandardResponse updateTarefa(Long idUsuario, Long idTarefa, TarefaDTO tarefa){
         Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
         Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
         UsuarioDTO usuarioDto = new UsuarioDTO(usuario, usuario.getTarefas());
         if (usuarioDto.getTarefas().contains(tarefaService.getById(idTarefa))){
             tarefa.setUsuario(usuarioDto);
-            tarefaService.update(idTarefa, tarefa);
-            return "Atualizado com sucesso!";
+
+            return tarefaService.update(idTarefa, tarefa);
         }else {
             throw new TaskNotAcceptableException("Essa tarefa não pertence a este usuário!");
         }
     }
 
-    public String deleteTarefa(Long idUsuario, Long idTarefa){
+    public StandardResponse deleteTarefa(Long idUsuario, Long idTarefa){
         Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
         Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
         UsuarioDTO usuarioDto = new UsuarioDTO(usuario, usuario.getTarefas());
         if (usuarioDto.getTarefas().contains(tarefaService.getById(idTarefa))){
-            tarefaService.delete(idTarefa);
-            return "Tarefa excluída com sucesso!";
+            return tarefaService.delete(idTarefa);
         }else{
             throw new TaskNotAcceptableException("Essa tarefa não pertence a este usuário!");
         }
     }
 
-    public String updateStatusTarefa(Long idUsuario, Long idTarefa, int codStatus){
+    public StandardResponse updateStatusTarefa(Long idUsuario, Long idTarefa, int codStatus){
 
         Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
         Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
