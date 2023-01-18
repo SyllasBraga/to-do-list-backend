@@ -10,7 +10,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
 
@@ -22,7 +21,6 @@ public class TarefaDTO {
     @NotBlank(message = "Insira uma breve descrição!")
     @Size(min = 4, max = 255, message = "Precisa ter de 4 até 255 caracteres!")
     private String descricao;
-    @NotNull(message = "Insira um status compatível, sendo eles: CONCLUIDA, VENCIDA e PENDENTE")
     @Enumerated(EnumType.STRING)
     private TarefaStatus statusTarefa;
     @NotNull(message = "Insira uma data de cadastro!")

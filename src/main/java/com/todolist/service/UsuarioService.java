@@ -1,6 +1,8 @@
 package com.todolist.service;
 
+import com.todolist.dtos.TarefaCreateDTO;
 import com.todolist.dtos.TarefaDTO;
+import com.todolist.dtos.UsuarioCreateDTO;
 import com.todolist.dtos.UsuarioDTO;
 import com.todolist.entities.Usuario;
 import com.todolist.exceptions.ResourceNotFoundException;
@@ -47,7 +49,7 @@ public class UsuarioService {
         return new UsuarioDTO(usuario, usuario.getTarefas());
     }
 
-    public String create(UsuarioDTO usuarioDto){
+    public String create(UsuarioCreateDTO usuarioDto){
         Usuario usuario = new Usuario();
         BeanUtils.copyProperties(usuarioDto, usuario);
         usuarioRepository.save(usuario);
@@ -73,7 +75,7 @@ public class UsuarioService {
         return "Sucesso na deleção!";
     }
 
-    public String createTarefa(Long idUsuario, TarefaDTO tarefaDto){
+    public String createTarefa(Long idUsuario, TarefaCreateDTO tarefaDto){
         Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
         Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         UsuarioDTO usuarioDto = new UsuarioDTO(usuario);

@@ -10,7 +10,6 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@MappedSuperclass
 public class StandardError {
 
     private Instant timestamp;

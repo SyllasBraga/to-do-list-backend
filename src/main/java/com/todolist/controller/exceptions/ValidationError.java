@@ -8,14 +8,20 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-public class ValidationError extends StandardError{
+public class ValidationError{
 
+    private Instant timestamp;
+    private int status;
+    private String error;
+    private String path;
     private List<FieldMessage> errors = new ArrayList<>();
 
-    public ValidationError(Instant now, int value, String message, String requestURI, Object o) {
+    public ValidationError(Instant timestamp, int status, String error, String path) {
+        this.timestamp = timestamp;
+        this.status = status;
+        this.error = error;
+        this.path = path;
     }
 
     public void addError(String nomeCampo, String error){

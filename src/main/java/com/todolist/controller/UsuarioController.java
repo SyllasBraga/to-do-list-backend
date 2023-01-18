@@ -1,6 +1,8 @@
 package com.todolist.controller;
 
+import com.todolist.dtos.TarefaCreateDTO;
 import com.todolist.dtos.TarefaDTO;
+import com.todolist.dtos.UsuarioCreateDTO;
 import com.todolist.dtos.UsuarioDTO;
 import com.todolist.entities.Tarefa;
 import com.todolist.entities.Usuario;
@@ -32,7 +34,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody @Valid UsuarioDTO usuarioDto){
+    public ResponseEntity<String> create(@RequestBody @Valid UsuarioCreateDTO usuarioDto){
         return ResponseEntity.ok(usuarioService.create(usuarioDto));
     }
 
@@ -47,7 +49,7 @@ public class UsuarioController {
     }
 
     @PostMapping(path = "/{id}/tarefas")
-    public ResponseEntity<String> createTarefa(@PathVariable(name = "id") Long idUsuario, @Valid @RequestBody TarefaDTO tarefa){
+    public ResponseEntity<String> createTarefa(@PathVariable(name = "id") Long idUsuario, @Valid @RequestBody TarefaCreateDTO tarefa){
         return ResponseEntity.ok(usuarioService.createTarefa(idUsuario, tarefa));
     }
 

@@ -6,6 +6,7 @@ import com.todolist.exceptions.TaskNotAcceptableException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -44,12 +45,24 @@ public class ControllerAdviceHandler {
     public ResponseEntity<ValidationError> argumentValidation(MethodArgumentNotValidException e,
                                                             HttpServletRequest request){
         ValidationError error = new ValidationError(Instant.now(), HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getMessage(),
-                request.getRequestURI(), null);
+                request.getRequestURI());
 
         for (FieldError f :e.getFieldErrors()) {
                 error.addError(f.getField(), f.getDefaultMessage());
         }
 
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY.value()).body(error);
+    }
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ValidationError> httpMessageNotReadableException(HttpMessageNotReadableException e,
+                                                              HttpServletRequest request){
+        ValidationError error = new ValidationError(Instant.now(), HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getMessage(),
+                request.getRequestURI());
+
+        error.addError("statusTarefa",
+                "Insira um status permitido, sendo eles: CONCLUIDA, VENCIDA e PENDENTE.");
+
+        System.out.println(error.toString());
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY.value()).body(error);
     }
 }
