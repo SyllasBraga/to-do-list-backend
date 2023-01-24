@@ -2,7 +2,6 @@ package com.todolist.service.validation;
 
 import com.todolist.controller.exceptions.FieldMessage;
 import com.todolist.dtos.UsuarioCreateDTO;
-import com.todolist.dtos.UsuarioDTO;
 import com.todolist.entities.Usuario;
 import com.todolist.repository.UsuarioRepository;
 import jakarta.validation.ConstraintValidator;

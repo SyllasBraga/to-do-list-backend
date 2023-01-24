@@ -4,15 +4,11 @@ import com.todolist.dtos.TarefaCreateDTO;
 import com.todolist.dtos.TarefaDTO;
 import com.todolist.dtos.UsuarioCreateDTO;
 import com.todolist.dtos.UsuarioDTO;
-import com.todolist.entities.Tarefa;
-import com.todolist.entities.Usuario;
 import com.todolist.service.UsuarioService;
 import com.todolist.service.utils.StandardResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")

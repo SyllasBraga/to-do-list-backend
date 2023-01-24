@@ -8,21 +8,19 @@ import com.todolist.entities.Usuario;
 import com.todolist.exceptions.ResourceNotFoundException;
 import com.todolist.exceptions.TaskNotAcceptableException;
 import com.todolist.repository.UsuarioRepository;
-import com.todolist.service.utils.CalculaListaTarefas;
 import com.todolist.service.utils.StandardResponse;
-import jakarta.servlet.http.HttpServletRequest;
+import com.todolist.service.utils.CalculaListaTarefas;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UsuarioService {
 
     UsuarioRepository usuarioRepository;

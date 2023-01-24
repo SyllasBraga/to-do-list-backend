@@ -7,6 +7,7 @@ import com.todolist.dtos.UsuarioDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

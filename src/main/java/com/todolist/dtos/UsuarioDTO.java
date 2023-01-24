@@ -2,7 +2,6 @@ package com.todolist.dtos;
 
 import com.todolist.entities.Tarefa;
 import com.todolist.entities.Usuario;
-import com.todolist.service.validation.UsuarioCreateValid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

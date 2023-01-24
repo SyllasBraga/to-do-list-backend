@@ -2,7 +2,6 @@ package com.todolist.service.validation;
 
 import com.todolist.controller.exceptions.FieldMessage;
 import com.todolist.dtos.TarefaCreateDTO;
-import com.todolist.repository.TarefaRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
