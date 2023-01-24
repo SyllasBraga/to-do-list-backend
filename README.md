@@ -49,7 +49,7 @@ Projeto para colocar em prática os meus conhecimentos em Java, Spring e MySql.
 
 [PUT] Atualizar status da tarefa para usuário específico: /usuario/{idUsuario}/tarefas/{idTarefa}/updatestatus?status={codStatus}
 
-    status=1, atribuirá a tarefa de CONCLUIDA
-    status=2, atribuirá a tarefa de PENDENTE 
-    status=3, atribuirá a tarefa de VENCIDA
+    codStatus=1, atribuirá a tarefa de CONCLUIDA
+    codStatus=2, atribuirá a tarefa de PENDENTE 
+    codStatus=3, atribuirá a tarefa de VENCIDA
 
