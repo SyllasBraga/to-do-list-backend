@@ -3,11 +3,11 @@ Projeto para colocar em prática os meus conhecimentos em Java, Spring e MySql.
 
 # Documentação das requisições
 
-[GET] Obter todos os usuários: {url}/usuario
+[GET] Obter todos os usuários: /usuario
 
-[GET] Obter usuário específico pelo id: {url}/usuario/{idUsuario}
+[GET] Obter usuário específico pelo id: /usuario/{idUsuario}
 
-[POST] Criar usuário: {url}/usuario
+[POST] Criar usuário: /usuario
 
     {
     "nome": "string",
@@ -15,7 +15,7 @@ Projeto para colocar em prática os meus conhecimentos em Java, Spring e MySql.
     "senha": "string"
     }
 
-[PUT] Atualizar usuário: {url}/usuario/{idUsuario}
+[PUT] Atualizar usuário: /usuario/{idUsuario}
 
     {
     "nome": "string",
@@ -23,19 +23,9 @@ Projeto para colocar em prática os meus conhecimentos em Java, Spring e MySql.
     "senha": "string"
     }
 
-[DELETE] Deletar usuário: {url}/usuario/{idUsuario}
+[DELETE] Deletar usuário: /usuario/{idUsuario}
 
-[POST] Criar tarefa para usuário específico: {url}/usuario/{idUsuario}/tarefas
-
-    {
-    "descricao": "string",
-    "statusTarefa": "ENUMS: VENCIDA, CONCLUIDA e PENDENTE",
-    "dataCadastro": "date",
-    "dataPrazo": "date",
-    "dataTermino": date
-    }
-
-[PUT] Atualizar tarefa para usuário específico: {url}/usuario/{idUsuario}/tarefas/{idTarefa}
+[POST] Criar tarefa para usuário específico: /usuario/{idUsuario}/tarefas
 
     {
     "descricao": "string",
@@ -45,9 +35,19 @@ Projeto para colocar em prática os meus conhecimentos em Java, Spring e MySql.
     "dataTermino": date
     }
 
-[DELETE] Deletar tarefa para usuário específico: {url}/usuario/{idUsuario}/tarefas/{idTarefa}
+[PUT] Atualizar tarefa para usuário específico: /usuario/{idUsuario}/tarefas/{idTarefa}
 
-[PUT] Atualizar status da tarefa para usuário específico: {url}/usuario/{idUsuario}/tarefas/{idTarefa}/updatestatus?status=0
+    {
+    "descricao": "string",
+    "statusTarefa": "ENUMS: VENCIDA, CONCLUIDA e PENDENTE",
+    "dataCadastro": "date",
+    "dataPrazo": "date",
+    "dataTermino": date
+    }
+
+[DELETE] Deletar tarefa para usuário específico: /usuario/{idUsuario}/tarefas/{idTarefa}
+
+[PUT] Atualizar status da tarefa para usuário específico: /usuario/{idUsuario}/tarefas/{idTarefa}/updatestatus?status=0
 status=1, atribuirá a tarefa de CONCLUIDA
 status=2, atribuirá a tarefa de PENDENTE
 status=3, atribuirá a tarefa de VENCIDA
