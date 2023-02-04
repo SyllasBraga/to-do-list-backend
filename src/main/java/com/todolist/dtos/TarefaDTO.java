@@ -40,4 +40,14 @@ public class TarefaDTO {
         this.dataTermino = tarefa.getDataTermino();
         this.usuario = new UsuarioDTO(usuario);
     }
+
+    public TarefaDTO(Tarefa tarefa) {
+        this.id = tarefa.getId();
+        this.descricao = tarefa.getDescricao();
+        this.statusTarefa = tarefa.getStatusTarefa();
+        this.dataCadastro = tarefa.getDataCadastro();
+        this.dataPrazo = tarefa.getDataPrazo();
+        this.dataTermino = tarefa.getDataTermino();
+        this.usuario = new UsuarioDTO(tarefa.getUsuario());
+    }
 }

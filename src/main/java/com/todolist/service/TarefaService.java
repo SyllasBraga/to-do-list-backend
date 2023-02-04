@@ -1,13 +1,14 @@
 package com.todolist.service;
 
+import com.todolist.dtos.TarefaCreateDTO;
 import com.todolist.dtos.TarefaDTO;
+import com.todolist.dtos.UsuarioDTO;
 import com.todolist.entities.Tarefa;
 import com.todolist.entities.Usuario;
 import com.todolist.enums.TarefaStatus;
 import com.todolist.exceptions.ResourceNotFoundException;
 import com.todolist.exceptions.CodStatusException;
 import com.todolist.repository.TarefaRepository;
-import com.todolist.service.utils.StandardResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class TarefaService {
         return tarefaDto;
     }
 
-    public StandardResponse create(TarefaDTO tarefaDto){
+    public TarefaDTO create(TarefaDTO tarefaDto){
         Tarefa tarefa = new Tarefa();
         Usuario usuario = new Usuario();
         BeanUtils.copyProperties(tarefaDto, tarefa);
@@ -35,15 +36,14 @@ public class TarefaService {
         tarefa.setUsuario(usuario);
         tarefaRepository.save(tarefa);
 
-        StandardResponse standardResponse = new StandardResponse();
-        standardResponse.setObject(tarefa);
-
-        return standardResponse;
+        return tarefaDto;
     }
 
-    public StandardResponse update(Long id, TarefaDTO tarefaDto){
+    public TarefaDTO update(Long id, TarefaDTO tarefaDto){
+
         Tarefa tarefa = new Tarefa();
         BeanUtils.copyProperties(tarefaDto, tarefa);
+
         return tarefaRepository.findById(id).map(Record ->{
             Record.setDataCadastro(tarefa.getDataCadastro());
             Record.setStatusTarefa(tarefa.getStatusTarefa());
@@ -52,41 +52,37 @@ public class TarefaService {
             Record.setDataTermino(tarefa.getDataTermino());
             tarefaRepository.save(Record);
 
-            StandardResponse standardResponse = new StandardResponse();
-            standardResponse.setObject(Record);
-
-            return standardResponse;
+            return tarefaDto;
         }).orElseThrow(()-> new ResourceNotFoundException("Tarefa não encontrada!"));
     }
 
-    public StandardResponse delete(Long id){
+    public String delete(Long id){
         tarefaRepository.deleteById(id);
 
-        StandardResponse standardResponse = new StandardResponse();
-
-        return standardResponse;
+        return "Tarefa deletada com sucesso.";
     }
 
-    public StandardResponse atualizaStatus(Long idTarefa, int codStatus){
+    public TarefaDTO atualizaStatus(Long idTarefa, int codStatus){
 
         Tarefa tarefa = tarefaRepository.findById(idTarefa).orElseThrow(() ->
                 new ResourceNotFoundException("Tarefa não encontrada!"));
-
-        StandardResponse standardResponse = new StandardResponse();
 
         switch (codStatus){
             case 1:
                 tarefa.setStatusTarefa(TarefaStatus.CONCLUIDA);
                 tarefaRepository.save(tarefa);
-                return standardResponse;
+
+                return new TarefaDTO(tarefa);
             case 2:
                 tarefa.setStatusTarefa(TarefaStatus.PENDENTE);
                 tarefaRepository.save(tarefa);
-                return standardResponse;
+
+                return new TarefaDTO(tarefa);
             case 3:
                 tarefa.setStatusTarefa(TarefaStatus.VENCIDA);
                 tarefaRepository.save(tarefa);
-                return standardResponse;
+
+                return new TarefaDTO(tarefa);
             default:
                 throw new CodStatusException("Erro na atualização de status: Código incompatível!");
         }
