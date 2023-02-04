@@ -41,8 +41,8 @@ public class UsuarioService {
             listaComTarefas.add(usuario);
         }
 
-        listaDto = (listaComTarefas.stream().map(
-                x -> new UsuarioDTO(x, x.getTarefas())).collect(Collectors.toList()));
+        listaDto = listaComTarefas.stream().map(
+                x -> new UsuarioDTO(x, x.getTarefas())).collect(Collectors.toList());
 
         return listaDto;
     }
@@ -79,17 +79,17 @@ public class UsuarioService {
     }
 
     public String delete(Long id){
-        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
-        Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
+        UsuarioDTO usuario = getById(id);
+
         usuarioRepository.deleteById(usuario.getId());
 
         return "O usuário "+ usuario.getNome() + " foi deletado do sistema com sucesso.";
     }
 
     public UsuarioDTO createTarefa(Long idUsuario, TarefaCreateDTO tarefaDto){
-        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(
-                () -> new ResourceNotFoundException("Usuário não encontrado!"));
-        UsuarioDTO usuarioDto = new UsuarioDTO(usuario);
+
+        UsuarioDTO usuarioDto = getById(idUsuario);
+
         tarefaDto.setUsuario(usuarioDto);
         tarefaService.create(tarefaDto);
         usuarioDto.getTarefas().add(tarefaDto);
@@ -107,12 +107,12 @@ public class UsuarioService {
         usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
         BeanUtils.copyProperties(usuario.getTarefas(), usuarioDto.getTarefas());
 
-
         if (usuarioDto.getTarefas().contains(tarefaService.getById(idTarefa))){
+
             tarefa.setUsuario(usuarioDto);
             tarefaService.update(idTarefa, tarefa);
-
             return usuarioDto;
+
         }else {
             throw new TaskNotAcceptableException("Essa tarefa não pertence a este usuário!");
         }
@@ -120,10 +120,7 @@ public class UsuarioService {
 
     public String deleteTarefa(Long idUsuario, Long idTarefa){
 
-        Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
-        Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
-        usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
-        UsuarioDTO usuarioDto = new UsuarioDTO(usuario, usuario.getTarefas());
+        UsuarioDTO usuarioDto = getById(idUsuario);
 
         if (usuarioDto.getTarefas().contains(tarefaService.getById(idTarefa))){
             return tarefaService.delete(idTarefa);
@@ -134,10 +131,7 @@ public class UsuarioService {
 
     public UsuarioDTO updateStatusTarefa(Long idUsuario, Long idTarefa, int codStatus){
 
-        Optional<Usuario> optUsuario = usuarioRepository.findById(idUsuario);
-        Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
-        usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
-        UsuarioDTO usuarioDto = new UsuarioDTO(usuario, usuario.getTarefas());
+        UsuarioDTO usuarioDto = getById(idUsuario);
 
         if (usuarioDto.getTarefas().contains(tarefaService.getById(idTarefa))){
             TarefaDTO tarefaDTO = tarefaService.atualizaStatus(idTarefa, codStatus);
