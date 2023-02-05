@@ -47,6 +47,7 @@ public class UsuarioService {
         return listaDto;
     }
 
+
     public UsuarioDTO getById(Long id){
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
         Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
