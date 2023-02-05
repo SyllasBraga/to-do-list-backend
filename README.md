@@ -5,6 +5,11 @@ Projeto para colocar em prática os meus conhecimentos em Java, Spring e MySql.
 
 Link para acessar a aplicação em deploy: https://sb-to-do-list.up.railway.app/
 
+# Documentação no swagger
+
+Link para acessar a documentação em deploy: https://sb-to-do-list.up.railway.app/swagger-ui/index.html#/
+
+
 # Documentação das requisições
 
 [GET] Obter todos os usuários: /usuario
