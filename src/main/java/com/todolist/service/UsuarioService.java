@@ -33,6 +33,7 @@ public class UsuarioService {
     }
 
     public List<UsuarioDTO> getAll(){
+
         List<Usuario> listaComTarefas = new ArrayList<>();
         List<UsuarioDTO> listaDto = new ArrayList<>();
 
@@ -49,6 +50,7 @@ public class UsuarioService {
 
 
     public UsuarioDTO getById(Long id){
+
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
         Usuario usuario = optUsuario.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         usuario.setTarefas(calcTarefas.recuperaListaTarefas(usuario));
